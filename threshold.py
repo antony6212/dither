@@ -14,9 +14,9 @@ def threshold(image_matrix, palette_name):
     cols, rows, depth = image_matrix.shape
     for y in range(rows):
         for x in range(cols):
-            old_pixel = numpy.array(new_matrix[x][y], dtype=numpy.float)
+            old_pixel = numpy.array(new_matrix[x][y], dtype=float)
             new_pixel = numpy.array(utils.closest_palette_color(old_pixel,
-                palette_name), dtype=numpy.float)
+                palette_name), dtype=float)
             new_matrix[x][y] = new_pixel
     return new_matrix
 

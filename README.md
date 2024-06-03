@@ -44,7 +44,7 @@ Several palettes are also available:
 Use `dither.py` to dither an input image with a given palette:
 
 ```
-python dither.py -m floyd_steinberg -p ega images/parrot.jpg
+python dither.py -m floyd_steinberg -p ega_default images/parrot.jpg
 ```
 
 ![parrot](images/parrot.jpg) ![dithered parrot](images/parrot_fs_ega.png)

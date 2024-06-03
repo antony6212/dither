@@ -62,9 +62,9 @@ def _error_diffusion(image_matrix, palette_name, diffusion_matrix):
                 print(f'old = {new_matrix[{x}][{y}]}')
 
             # calculate the new pixel value
-            old_pixel = numpy.array(new_matrix[x][y], dtype=numpy.float)
+            old_pixel = numpy.array(new_matrix[x][y], dtype=float)
             new_pixel = numpy.array(utils.closest_palette_color(old_pixel,
-                palette_name), dtype=numpy.float)
+                palette_name), dtype=float)
             # replace the old pixel with the new value, and quantify the error
             new_matrix[x][y] = new_pixel
             quant_error = old_pixel - new_pixel
@@ -82,7 +82,7 @@ def _error_diffusion(image_matrix, palette_name, diffusion_matrix):
                     new_matrix[x + (ci + 1)][y] += quant_error * coeff
             for di, downward_diffusion in enumerate(diffusion_matrix[1:]):
                 if y + di + 1 < rows:
-                    offset = len(downward_diffusion) / 2
+                    offset = len(downward_diffusion) // 2
                     for ci, coeff in enumerate(downward_diffusion):
                         if 0 <= x + ci - offset < cols:
                             new_matrix[x + ci - offset][y + di + 1] += quant_error * coeff

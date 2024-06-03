@@ -10,7 +10,7 @@ def open_image(image_filename):
 
 
 def pil2numpy(image):
-    matrix = numpy.asarray(image, dtype=numpy.float)
+    matrix = numpy.asarray(image, dtype=float)
     return matrix/255. 
 
 

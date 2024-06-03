@@ -49,7 +49,7 @@ def _get_font(image_size):
     if font is not None:
         longest_palette_name = max(palette.available_palettes, key=len)
         longest_method_name  = max(available_methods, key=len)
-        while font.getsize(longest_palette_name)[0] < constraint and font.getsize(longest_method_name)[0] < constraint:
+        while (palette_W:=font.getbbox(longest_palette_name))[2]-palette_W[0] < constraint and (method_W:=font.getbbox(longest_method_name))[2]-method_W[0] < constraint:
             fontsize += 1
             font = ImageFont.truetype(goodname, size=fontsize)
         font = ImageFont.truetype(goodname, size=max(1, fontsize-1))
@@ -80,12 +80,14 @@ def create_collage(image_filename):
     work_objects = []
 
     for p_i, p in enumerate(palette.available_palettes):
-        text_width, text_height = font.getsize(p)
+        p_bbox = font.getbbox(p)
+        text_width, text_height = p_bbox[2]-p_bbox[0], p_bbox[3]-p_bbox[1]
         text_pos = ((p_i + 1) * width + (width - text_width) / 2, (height - text_height) / 2)
         drawer.text(text_pos, p, font=font, fill=font_color)
         for m_i, m in enumerate(available_methods):
             if p_i == 0:
-                text_width, text_height = font.getsize(m)
+                m_bbox = font.getbbox(m)
+                text_width, text_height = m_bbox[2]-m_bbox[0], m_bbox[3]-m_bbox[1]
                 text_pos = ((width - text_width) / 2, (m_i + 1) * height + (height - text_height) / 2)
                 drawer.text(text_pos, m, font=font, fill=font_color)
             image_offset = ((p_i + 1) * width, (m_i + 1) * height)
@@ -100,8 +102,11 @@ def create_collage(image_filename):
         image_offset, dither_image = r
         canvas.paste(dither_image, image_offset)
 
-    canvas.save('collage.png')
-    canvas.show()
+    if args.output == '':
+        canvas.save('collage.png')
+        canvas.show()
+    else:
+        canvas.save(args.output)
 
 if __name__ == '__main__':
     import argparse
@@ -119,7 +124,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.all:
-        create_collage(args.image_filename)
+        create_collage(args.image_filename,args.output)
     else:
         image = utils.open_image(args.image_filename)
         image_matrix = utils.pil2numpy(image)
@@ -128,6 +133,7 @@ if __name__ == '__main__':
         dither_image = utils.numpy2pil(dither_matrix)
 
         if args.output == '':
+            dither_image.save('dither_image.png')
             dither_image.show()
         else:
             dither_image.save(args.output)

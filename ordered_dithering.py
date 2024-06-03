@@ -55,10 +55,10 @@ def _ordered_dither(image_matrix, palette_name, map_to_use):
                 print(f'<{x}, {y}>')
                 print(f'old = {new_matrix[{x}][{y}]}')
 
-            old_pixel = numpy.array(new_matrix[x][y], dtype=numpy.float)
+            old_pixel = numpy.array(new_matrix[x][y], dtype=float)
             old_pixel += old_pixel * map_to_use[x % map_size][y % map_size]
             new_pixel = numpy.array(utils.closest_palette_color(old_pixel,
-                palette_name), dtype=numpy.float)
+                palette_name), dtype=float)
             new_matrix[x][y] = new_pixel
     return new_matrix
 

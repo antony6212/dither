@@ -14,7 +14,7 @@ def block_randomized(image_matrix, palette_name):
     new_matrix = numpy.copy(image_matrix)
     cols, rows, depth = image_matrix.shape
     
-    block_width, block_height = (max(1, cols/50), max(1, rows/50))
+    block_width, block_height = (max(1, cols//50), max(1, rows//50))
 
     for by in range(0, rows, block_height):
         for bx in range(0, cols, block_width):
@@ -27,7 +27,7 @@ def block_randomized(image_matrix, palette_name):
                     ab = utils.clamp(ag + random.gauss(0.0, 1./6.))
                     ag = utils.clamp(ab + random.gauss(0.0, 1./6.))
                     new_pixel = numpy.array(utils.closest_palette_color([ar, ag, ab],
-                        palette_name), dtype=numpy.float)
+                        palette_name), dtype=float)
                     new_matrix[bx+x][by+y] = new_pixel
     return new_matrix
 
@@ -40,14 +40,14 @@ def randomized(image_matrix, palette_name):
                 print(f'<{x}, {y}>')
                 print(f'old = {new_matrix[{x}][{y}]}')
 
-            old_pixel = numpy.array(new_matrix[x][y], dtype=numpy.float)
+            old_pixel = numpy.array(new_matrix[x][y], dtype=float)
             opr, opg, opb = old_pixel
             # add a random value in [-0.5, 0.5]
             opr = utils.clamp(opr + random.gauss(0.0, 1./6.))
             opg = utils.clamp(opg + random.gauss(0.0, 1./6.))
             opb = utils.clamp(opb + random.gauss(0.0, 1./6.))
             new_pixel = numpy.array(utils.closest_palette_color([opr, opg, opb],
-                palette_name), dtype=numpy.float)
+                palette_name), dtype=float)
             new_matrix[x][y] = new_pixel
     return new_matrix
 
